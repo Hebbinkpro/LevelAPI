@@ -298,14 +298,14 @@ class LevelController
 	 */
 	public static function getXpByTotalXp(int $totalXp)
 	{
-		$level = 0;
-		$xp = $totalXp;
-		$levelUpXp = self::getXpNextLevel($level);
-		while ($xp >= $levelUpXp) {
-			$xp = $totalXp - $levelUpXp;
-			$level++;
-			$levelUpXp = self::getXpNextLevel($level);
+		$level = self::getLevelByTotalXp($totalXp);
+		$xpUsed = 0;
+		for($i=0;$i<$level;$i++){
+			$xpUsed += self::getXpNextLevel($i);
 		}
+		$xp = $totalXp - $xpUsed;
+
+		return $xp;
 	}
 
 	//level functions
