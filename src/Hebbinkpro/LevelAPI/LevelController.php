@@ -72,12 +72,12 @@ class LevelController
 	{
 		$db = Main::getInstance()->db;
 
-		$stmt = $db->prepare("SELECT name FROM players WHERE name = :name");
+		$stmt = $db->prepare("SELECT COUNT(*) AS amount FROM players WHERE name = :name");
 		$stmt->bindValue("name", $username, SQLITE3_TEXT);
 		$res = $stmt->execute()->fetchArray();
 		$stmt->close();
 
-		if ($username === $res["name"]) {
+		if ($res["amount"] != 0) {
 			return true;
 		}
 
