@@ -124,6 +124,35 @@ class LevelController
 
 		return null;
 	}
+	
+	/**
+	 * @param false $sorted
+	 * @param int $sortType
+	 * @return array
+	 */
+	public static function getAllUsers($sorted = false, $sortType = SORT_DESC){
+		$db = Main::getInstance()->db;
+		
+		$users = [];
+		$stmt = $db->prepare("SELECT name FROM players");
+		$exe = $stmt->execute();
+		while ($row = $exe->fetchArray()){
+			$name = $row["name"];
+			$users[] = $name;
+		}
+		$stmt->close();
+
+		if(!$sorted){
+			return $users;
+		}
+
+		$totalxp = [];
+		foreach($users as $key=>$user){
+			$totalxp[$key] = self::getTotalXp($user);
+		}
+		array_multisort($totalxp, $sortType, $users);
+		return $users;
+	}
 
 	//xp functions
 
